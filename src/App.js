@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+
+import React, { useState, useEffect } from 'react';
+import CompteList from './components/CompteList';
+import CompteForm from './components/CompteForm';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [comptes, setComptes] = useState([]);
+
+    useEffect(() => {
+        const savedComptes = JSON.parse(localStorage.getItem('comptes')) || [];
+        setComptes(savedComptes);
+    }, []);
+
+    const ajouterCompte = (nouveauCompte) => {
+        const updatedComptes = [...comptes, nouveauCompte];
+        setComptes(updatedComptes);
+        localStorage.setItem('comptes', JSON.stringify(updatedComptes));
+    };
+
+    return (
+        <div>
+            <CompteForm onAjouter={ajouterCompte} />
+            <CompteList comptes={comptes} />
+        </div>
+    );
 }
 
 export default App;
